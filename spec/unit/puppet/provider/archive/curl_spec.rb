@@ -15,7 +15,7 @@ RSpec.describe curl_provider do
       [
         'http://home.lan/example.zip',
         '-o',
-        String,
+        "/tmp/example.zip",
         '-fsSLg',
         '--max-redirs',
         5

@@ -56,7 +56,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
     ]
     
     # when header(s) defined, place header as the first param to the curl command
-    if defined?(resource[:header])
+    unless resource[:header].nil?
       params_combined = params_header + params_default
     else
       params_combined = params_default
