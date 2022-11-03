@@ -39,7 +39,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
   end
 
   def download(filepath)
-    params = curl_params(
+    params_default = curl_params(
       [
         resource[:source],
         '-o',
@@ -49,6 +49,20 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
         5
       ]
     )
+
+    # optional header switch to use tokens, etc
+    params_header = [
+      optional_switch(resource[:header], ['-H', '%s'])
+    ]
+    
+    # when header(s) defined, place header as the first param to the curl command
+    if defined?(resource[:header])
+      params_combined = params_header + params_default
+    else
+      params_combined = params_default
+    end
+
+    params = curl_params(params_combined)
 
     begin
       curl(params)
